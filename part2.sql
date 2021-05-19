@@ -16,14 +16,18 @@ CREATE TABLE hospital (hid INTEGER,
                        hname CHAR(40),
                        PRIMARY KEY(hid));
 
-CREATE TABLE department (did INTEGER,
-                         dname CHAR(40),
-                         PRIMARY KEY(did));
-                         
-CREATE TABLE doctor (docid INTEGER,
-                     docname CHAR(40),
-                     specialty CHAR(40),
-                     PRIMARY KEY(docid));
+CREATE TABLE department_includes (did INTEGER,
+                                  dname CHAR(40),
+                                  PRIMARY KEY(did),
+                                  FOREIGN KEY (hid) REFERENCES (hospital) -- many depts in a hospital
+                                  ON DELETE CASCADE);                     -- participation constraint
+                                 
+CREATE TABLE doctor_worksdept (docid INTEGER,
+                               docname CHAR(40),
+                               specialty CHAR(40),
+                               PRIMARY KEY(docid),
+                               FOREIGN KEY (did) REFERENCES (department_includes) -- many docs in a dept
+                               ON DELETE CASCADE);                                -- participation constraint);
 
 CREATE TABLE patient (pid INTEGER,
                      pname CHAR(40),
@@ -33,12 +37,41 @@ CREATE TABLE patient (pid INTEGER,
                      total_appt INTEGER,
                      PRIMARY KEY(pid));
 
-CREATE TABLE staff (sid INTEGER,
+CREATE TABLE staff_worksin (sid INTEGER,
                     sname CHAR(40),
-                    PRIMARY KEY(sid));
+                    PRIMARY KEY(sid),
+                    FOREIGN KEY (aid) REFERENCES (appointment), -- many staff work in a hospital
+                    ON DELETE CASCADE);                         -- participation constraint
 
-CREATE TABLE appointment (aid INTEGER,
+CREATE TABLE appt_sched_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
-                          PRIMARY KEY(aid));
+                          PRIMARY KEY(aid),
+                          FOREIGN KEY (sid) REFERENCES (staff_worksin),      -- many appts can be made by a staff
+                          FOREIGN KEY (docid) REFERENCES (doctor_worksdept)  -- a doc can attend many appts
+                          ON DELETE CASCADE);                                -- participation constraint (needed here? not given in soln) - would apply to all foreign keys?
+
+-- Many-to-many relationships
+
+--CREATE TABLE has (aid INTEGER,
+--                  docid INTEGER,
+--                  PRIMARY KEY(aid, docid),
+--                  FOREIGN KEY (aid) REFERENCES (appointment),
+--                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept)); --doesn't seem right - appts can have many docs? nothing specified on soln (put in appt)
+                  
+--CREATE TABLE schedule (aid INTEGER,
+--                       sid INTEGER,
+--                       PRIMARY KEY(aid, sid),
+--                       FOREIGN KEY (aid) REFERENCES (appointment),
+--                       FOREIGN KEY (sid) REFERENCES (staff_worksin)); --doesn't seem right - many staf can sche the same appt? nothing specified on soln (put in appt)
+                  
+CREATE TABLE request_maintenance (sid INTEGER,
+                                  docid INTEGER,
+                                  patient_per_hr INTEGER,
+                                  dept_name CHAR(40),
+                                  time_slot CHAR(40),
+                                  PRIMARY KEY(sid, docid),
+                                  FOREIGN KEY (sid) REFERENCES (staff),
+                                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept));
+
 
