@@ -102,7 +102,7 @@ CREATE TABLE request_maintenance (sid INTEGER,
                                   dept_name CHAR(40),
                                   time_slot CHAR(40),
                                   PRIMARY KEY(sid, docid),
-                                  FOREIGN KEY (sid) REFERENCES staff,
+                                  FOREIGN KEY (sid) REFERENCES staff_worksin,
                                   FOREIGN KEY (docid) REFERENCES doctor_worksdept); -- doc can make many requests and staff can deal with many requests
                                   
 CREATE TABLE searches (aid INTEGER,
