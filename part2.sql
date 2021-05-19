@@ -6,11 +6,18 @@
 -- First drop any existing tables.
 --
 DROP TABLE if EXISTS hospital
-DROP TABLE if EXISTS department
-DROP TABLE if EXISTS doctor
+DROP TABLE if EXISTS department_includes
+DROP TABLE if EXISTS doctor_worksdept
 DROP TABLE if EXISTS patient
-DROP TABLE if EXISTS staff
-DROP TABLE if EXISTS appointment
+DROP TABLE if EXISTS staff_worksin
+DROP TABLE if EXISTS appt_has
+DROP TABLE if EXISTS past_appt
+DROP TABLE if EXISTS waitlisted_appt
+DROP TABLE if EXISTS active_appt
+DROP TABLE if EXISTS avail_appt
+DROP TABLE if EXISTS schedule
+DROP TABLE if EXISTS request_maintenance
+DROP TABLE if EXISTS searches
 
 CREATE TABLE hospital (hid INTEGER,
                        hname CHAR(40),
