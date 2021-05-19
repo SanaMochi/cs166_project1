@@ -44,7 +44,7 @@ CREATE TABLE staff_worksin (sid INTEGER,
                     ON DELETE CASCADE);                         -- participation constraint
 
 
-CREATE TABLE appt_sched_has (aid INTEGER,
+CREATE TABLE appt_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
                           PRIMARY KEY(aid),
@@ -54,22 +54,22 @@ CREATE TABLE appt_sched_has (aid INTEGER,
 
 CREATE TABLE past_appt (aid INTEGER,
                         PRIMARY KEY(aid),
-                        FOREIGN KEY (aid) REFERENCES (appt_sched_has)
+                        FOREIGN KEY (aid) REFERENCES (appt_has)
                         ON DELETE CASCADE);
 
 CREATE TABLE waitlisted_appt (aid INTEGER,
                               PRIMARY KEY(aid),
-                              FOREIGN KEY (aid) REFERENCES (appt_sched_has)
+                              FOREIGN KEY (aid) REFERENCES (appt_has)
                               ON DELETE CASCADE);
                         
 CREATE TABLE active_appt (aid INTEGER,
                           PRIMARY KEY(aid),
-                          FOREIGN KEY (aid) REFERENCES (appt_sched_has)
+                          FOREIGN KEY (aid) REFERENCES (appt_has)
                           ON DELETE CASCADE);
 
 CREATE TABLE avail_appt (aid INTEGER,
                          PRIMARY KEY(aid),
-                         FOREIGN KEY (aid) REFERENCES (appt_sched_has)
+                         FOREIGN KEY (aid) REFERENCES (appt_has)
                          ON DELETE CASCADE);
 
 
@@ -84,7 +84,7 @@ CREATE TABLE avail_appt (aid INTEGER,
 CREATE TABLE schedule (aid INTEGER,
                        sid INTEGER,
                        PRIMARY KEY(aid, sid),
-                       FOREIGN KEY (aid) REFERENCES (appointment),
+                       FOREIGN KEY (aid) REFERENCES (appt_has),
                        FOREIGN KEY (sid) REFERENCES (staff_worksin)); 
                        
 CREATE TABLE request_maintenance (sid INTEGER,
