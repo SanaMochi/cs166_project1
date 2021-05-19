@@ -49,7 +49,7 @@ CREATE TABLE patient (pid INTEGER NOT NULL,
 
 
 CREATE TABLE appt (aid INTEGER NOT NULL,
-                   date DATE,
+                   adate DATE,
                    time_slot CHAR(10),
                    PRIMARY KEY(aid));
                           
