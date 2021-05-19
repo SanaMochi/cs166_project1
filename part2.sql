@@ -5,19 +5,20 @@
 --
 -- First drop any existing tables.
 --
-DROP TABLE if EXISTS hospital;
-DROP TABLE if EXISTS department_includes;
-DROP TABLE if EXISTS doctor_worksdept;
-DROP TABLE if EXISTS patient;
-DROP TABLE if EXISTS staff_worksin;
-DROP TABLE if EXISTS appt_has;
-DROP TABLE if EXISTS past_appt;
-DROP TABLE if EXISTS waitlisted_appt;
-DROP TABLE if EXISTS active_appt;
-DROP TABLE if EXISTS avail_appt;
-DROP TABLE if EXISTS schedule;
-DROP TABLE if EXISTS request_maintenance;
-DROP TABLE if EXISTS searches;
+DROP TABLE if EXISTS hospital CASCADE;
+DROP TABLE if EXISTS department_includes CASCADE;
+DROP TABLE if EXISTS doctor_worksdept CASCADE;
+DROP TABLE if EXISTS patient CASCADE;
+DROP TABLE if EXISTS staff_worksin CASCADE;
+DROP TABLE if EXISTS appt CASCADE;
+DROP TABLE if EXISTS past_appt CASCADE;
+DROP TABLE if EXISTS waitlisted_appt CASCADE;
+DROP TABLE if EXISTS active_appt CASCADE;
+DROP TABLE if EXISTS avail_appt CASCADE;
+DROP TABLE if EXISTS has CASCADE;
+DROP TABLE if EXISTS schedule CASCADE;
+DROP TABLE if EXISTS request_maintenance CASCADE;
+DROP TABLE if EXISTS searches CASCADE;
 
 CREATE TABLE hospital (hid INTEGER,
                        hname CHAR(40),
@@ -47,38 +48,38 @@ CREATE TABLE patient (pid INTEGER,
                      PRIMARY KEY(pid));
 
 
-CREATE TABLE appt_has (aid INTEGER,
+CREATE TABLE appt (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
-                          PRIMARY KEY(aid);
+                          PRIMARY KEY(aid));
                           
 CREATE TABLE staff_worksin (sid INTEGER,
                             aid INTEGER,
                             sname CHAR(40),
                             PRIMARY KEY(sid),
-                            FOREIGN KEY (aid) REFERENCES appt_has -- many staff work in a hospital
-                            ON DELETE CASCADE);                      -- participation constraint
+                            FOREIGN KEY (aid) REFERENCES appt -- many staff work in a hospital
+                            ON DELETE CASCADE);               -- participation constraint
 
 -- ISA Heirarchy
 
 CREATE TABLE past_appt (aid INTEGER,
                         PRIMARY KEY(aid),
-                        FOREIGN KEY (aid) REFERENCES appt_has
+                        FOREIGN KEY (aid) REFERENCES appt
                         ON DELETE CASCADE);
 
 CREATE TABLE waitlisted_appt (aid INTEGER,
                               PRIMARY KEY(aid),
-                              FOREIGN KEY (aid) REFERENCES appt_has
+                              FOREIGN KEY (aid) REFERENCES appt
                               ON DELETE CASCADE);
                         
 CREATE TABLE active_appt (aid INTEGER,
                           PRIMARY KEY(aid),
-                          FOREIGN KEY (aid) REFERENCES appt_has
+                          FOREIGN KEY (aid) REFERENCES appt
                           ON DELETE CASCADE);
 
 CREATE TABLE avail_appt (aid INTEGER,
                          PRIMARY KEY(aid),
-                         FOREIGN KEY (aid) REFERENCES appt_has
+                         FOREIGN KEY (aid) REFERENCES appt
                          ON DELETE CASCADE);
 
 
@@ -86,13 +87,13 @@ CREATE TABLE avail_appt (aid INTEGER,
 CREATE TABLE has (aid INTEGER,
                   docid INTEGER,
                   PRIMARY KEY(aid, docid),
-                  FOREIGN KEY (aid) REFERENCES (appointment),
-                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept)); -- many docs can attend an appt and a doc can have many appts
+                  FOREIGN KEY (aid) REFERENCES appt,
+                  FOREIGN KEY (docid) REFERENCES doctor_worksdept); -- many docs can attend an appt and a doc can have many appts
                   
 CREATE TABLE schedule (aid INTEGER,
                        sid INTEGER,
                        PRIMARY KEY(aid, sid),
-                       FOREIGN KEY (aid) REFERENCES appt_has,
+                       FOREIGN KEY (aid) REFERENCES appt,
                        FOREIGN KEY (sid) REFERENCES staff_worksin); --staff can schedule many appts and different staff can edit the same appt
                        
 CREATE TABLE request_maintenance (sid INTEGER,
@@ -108,7 +109,7 @@ CREATE TABLE searches (aid INTEGER,
                        hid INTEGER,
                        pid INTEGER,
                        PRIMARY KEY (aid, hid, pid),
-                       FOREIGN KEY (aid) REFERENCES appt_has,
+                       FOREIGN KEY (aid) REFERENCES appt,
                        FOREIGN KEY (hid) REFERENCES hospital,
                        FOREIGN KEY (pid) REFERENCES patient);
 
