@@ -43,11 +43,26 @@ CREATE TABLE staff_worksin (sid INTEGER,
                     FOREIGN KEY (aid) REFERENCES (appointment), -- many staff work in a hospital
                     ON DELETE CASCADE);                         -- participation constraint
 
+-- ISA Heirarchy
+
 CREATE TABLE appt_sched_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
                           PRIMARY KEY(aid),
                           FOREIGN KEY (docid) REFERENCES (doctor_worksdept));  -- a doc can attend many appts (only one doc per appt)
+
+CREATE TABLE waitlisted_appt (aid INTEGER,
+                              PRIMARY KEY(aid),
+                              FOREIGN KEY (aid) REFERENCES (appt_sched_has));
+                        
+CREATE TABLE active_appt (aid INTEGER,
+                          PRIMARY KEY(aid),
+                          FOREIGN KEY (aid) REFERENCES (appt_sched_has));
+
+CREATE TABLE avail_appt (aid INTEGER,
+                         PRIMARY KEY(aid),
+                         FOREIGN KEY (aid) REFERENCES (appt_sched_has));
+
 
 -- Many-to-many relationships
 
