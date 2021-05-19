@@ -24,12 +24,14 @@ CREATE TABLE hospital (hid INTEGER,
                        PRIMARY KEY(hid));
 
 CREATE TABLE department_includes (did INTEGER,
+                                  hid INTEGER,
                                   dname CHAR(40),
                                   PRIMARY KEY(did),
                                   FOREIGN KEY (hid) REFERENCES hospital -- many depts in a hospital
                                   ON DELETE CASCADE);                     -- participation constraint
                                  
 CREATE TABLE doctor_worksdept (docid INTEGER,
+                               did INTEGER,
                                docname CHAR(40),
                                specialty CHAR(40),
                                PRIMARY KEY(docid),
@@ -51,10 +53,11 @@ CREATE TABLE appt_has (aid INTEGER,
                           PRIMARY KEY(aid);
                           
 CREATE TABLE staff_worksin (sid INTEGER,
-                    sname CHAR(40),
-                    PRIMARY KEY(sid),
-                    FOREIGN KEY (aid) REFERENCES appt_has -- many staff work in a hospital
-                    ON DELETE CASCADE);                      -- participation constraint
+                            aid INTEGER,
+                            sname CHAR(40),
+                            PRIMARY KEY(sid),
+                            FOREIGN KEY (aid) REFERENCES appt_has -- many staff work in a hospital
+                            ON DELETE CASCADE);                      -- participation constraint
 
 -- ISA Heirarchy
 
