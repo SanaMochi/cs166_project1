@@ -47,9 +47,7 @@ CREATE TABLE appt_sched_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
                           PRIMARY KEY(aid),
-                          FOREIGN KEY (sid) REFERENCES (staff_worksin),      -- many appts can be made by a staff
-                          FOREIGN KEY (docid) REFERENCES (doctor_worksdept)  -- a doc can attend many appts
-                          ON DELETE CASCADE);                                -- participation constraint (needed here? not given in soln) - would apply to all foreign keys?
+                          FOREIGN KEY (docid) REFERENCES (doctor_worksdept));  -- a doc can attend many appts (only one doc per appt)
 
 -- Many-to-many relationships
 
@@ -59,12 +57,12 @@ CREATE TABLE appt_sched_has (aid INTEGER,
 --                  FOREIGN KEY (aid) REFERENCES (appointment),
 --                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept)); --doesn't seem right - appts can have many docs? nothing specified on soln (put in appt)
                   
---CREATE TABLE schedule (aid INTEGER,
---                       sid INTEGER,
---                       PRIMARY KEY(aid, sid),
---                       FOREIGN KEY (aid) REFERENCES (appointment),
---                       FOREIGN KEY (sid) REFERENCES (staff_worksin)); --doesn't seem right - many staf can sche the same appt? nothing specified on soln (put in appt)
-                  
+CREATE TABLE schedule (aid INTEGER,
+                       sid INTEGER,
+                       PRIMARY KEY(aid, sid),
+                       FOREIGN KEY (aid) REFERENCES (appointment),
+                       FOREIGN KEY (sid) REFERENCES (staff_worksin)); 
+                       
 CREATE TABLE request_maintenance (sid INTEGER,
                                   docid INTEGER,
                                   patient_per_hr INTEGER,
