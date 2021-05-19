@@ -40,8 +40,8 @@ CREATE TABLE patient (pid INTEGER,
 CREATE TABLE staff_worksin (sid INTEGER,
                     sname CHAR(40),
                     PRIMARY KEY(sid),
-                    FOREIGN KEY (aid) REFERENCES (appointment), -- many staff work in a hospital
-                    ON DELETE CASCADE);                         -- participation constraint
+                    FOREIGN KEY (aid) REFERENCES (appt_has), -- many staff work in a hospital
+                    ON DELETE CASCADE);                      -- participation constraint
 
 
 CREATE TABLE appt_has (aid INTEGER,
@@ -95,5 +95,13 @@ CREATE TABLE request_maintenance (sid INTEGER,
                                   PRIMARY KEY(sid, docid),
                                   FOREIGN KEY (sid) REFERENCES (staff),
                                   FOREIGN KEY (docid) REFERENCES (doctor_worksdept));
+                                  
+CREATE TABLE searches (aid INTEGER,
+                       hid INTEGER,
+                       pid INTEGER,
+                       PRIMARY KEY (aid, hid, pid),
+                       FOREIGN KEY (aid) REFERENCES (appt_has),
+                       FOREIGN KEY (hid) REFERENCES (hospital),
+                       FOREIGN KEY (pid) REFERENCES (patient));
 
 
