@@ -73,14 +73,8 @@ CREATE TABLE avail_appt (aid INTEGER,
                          ON DELETE CASCADE);
 
 
--- Many-to-many relationships
-
---CREATE TABLE has (aid INTEGER,
---                  docid INTEGER,
---                  PRIMARY KEY(aid, docid),
---                  FOREIGN KEY (aid) REFERENCES (appointment),
---                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept)); --doesn't seem right - appts can have many docs? nothing specified on soln (put in appt)
-                  
+-- Relationship Tables
+    
 CREATE TABLE schedule (aid INTEGER,
                        sid INTEGER,
                        PRIMARY KEY(aid, sid),
