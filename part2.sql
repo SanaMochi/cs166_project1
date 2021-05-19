@@ -26,14 +26,14 @@ CREATE TABLE hospital (hid INTEGER,
 CREATE TABLE department_includes (did INTEGER,
                                   dname CHAR(40),
                                   PRIMARY KEY(did),
-                                  FOREIGN KEY (hid) REFERENCES (hospital) -- many depts in a hospital
+                                  FOREIGN KEY (hid) REFERENCES hospital -- many depts in a hospital
                                   ON DELETE CASCADE);                     -- participation constraint
                                  
 CREATE TABLE doctor_worksdept (docid INTEGER,
                                docname CHAR(40),
                                specialty CHAR(40),
                                PRIMARY KEY(docid),
-                               FOREIGN KEY (did) REFERENCES (department_includes) -- many docs in a dept
+                               FOREIGN KEY (did) REFERENCES department_includes -- many docs in a dept
                                ON DELETE CASCADE);                                -- participation constraint);
 
 CREATE TABLE patient (pid INTEGER,
@@ -44,39 +44,39 @@ CREATE TABLE patient (pid INTEGER,
                      total_appt INTEGER,
                      PRIMARY KEY(pid));
 
-CREATE TABLE staff_worksin (sid INTEGER,
-                    sname CHAR(40),
-                    PRIMARY KEY(sid),
-                    FOREIGN KEY (aid) REFERENCES (appt_has), -- many staff work in a hospital
-                    ON DELETE CASCADE);                      -- participation constraint
-
 
 CREATE TABLE appt_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
                           PRIMARY KEY(aid),
-                          FOREIGN KEY (docid) REFERENCES (doctor_worksdept));  -- a doc can attend many appts (only one doc per appt)
+                          FOREIGN KEY (docid) REFERENCES doctor_worksdept);  -- a doc can attend many appts (only one doc per appt)
+                          
+CREATE TABLE staff_worksin (sid INTEGER,
+                    sname CHAR(40),
+                    PRIMARY KEY(sid),
+                    FOREIGN KEY (aid) REFERENCES appt_has, -- many staff work in a hospital
+                    ON DELETE CASCADE);                      -- participation constraint
 
 -- ISA Heirarchy
 
 CREATE TABLE past_appt (aid INTEGER,
                         PRIMARY KEY(aid),
-                        FOREIGN KEY (aid) REFERENCES (appt_has)
+                        FOREIGN KEY (aid) REFERENCES appt_has
                         ON DELETE CASCADE);
 
 CREATE TABLE waitlisted_appt (aid INTEGER,
                               PRIMARY KEY(aid),
-                              FOREIGN KEY (aid) REFERENCES (appt_has)
+                              FOREIGN KEY (aid) REFERENCES appt_has
                               ON DELETE CASCADE);
                         
 CREATE TABLE active_appt (aid INTEGER,
                           PRIMARY KEY(aid),
-                          FOREIGN KEY (aid) REFERENCES (appt_has)
+                          FOREIGN KEY (aid) REFERENCES appt_has
                           ON DELETE CASCADE);
 
 CREATE TABLE avail_appt (aid INTEGER,
                          PRIMARY KEY(aid),
-                         FOREIGN KEY (aid) REFERENCES (appt_has)
+                         FOREIGN KEY (aid) REFERENCES appt_has
                          ON DELETE CASCADE);
 
 
@@ -85,8 +85,8 @@ CREATE TABLE avail_appt (aid INTEGER,
 CREATE TABLE schedule (aid INTEGER,
                        sid INTEGER,
                        PRIMARY KEY(aid, sid),
-                       FOREIGN KEY (aid) REFERENCES (appt_has),
-                       FOREIGN KEY (sid) REFERENCES (staff_worksin)); 
+                       FOREIGN KEY (aid) REFERENCES appt_has,
+                       FOREIGN KEY (sid) REFERENCES staff_worksin); 
                        
 CREATE TABLE request_maintenance (sid INTEGER,
                                   docid INTEGER,
@@ -94,15 +94,15 @@ CREATE TABLE request_maintenance (sid INTEGER,
                                   dept_name CHAR(40),
                                   time_slot CHAR(40),
                                   PRIMARY KEY(sid, docid),
-                                  FOREIGN KEY (sid) REFERENCES (staff),
-                                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept));
+                                  FOREIGN KEY (sid) REFERENCES staff,
+                                  FOREIGN KEY (docid) REFERENCES doctor_worksdept);
                                   
 CREATE TABLE searches (aid INTEGER,
                        hid INTEGER,
                        pid INTEGER,
                        PRIMARY KEY (aid, hid, pid),
-                       FOREIGN KEY (aid) REFERENCES (appt_has),
-                       FOREIGN KEY (hid) REFERENCES (hospital),
-                       FOREIGN KEY (pid) REFERENCES (patient));
+                       FOREIGN KEY (aid) REFERENCES appt_has,
+                       FOREIGN KEY (hid) REFERENCES hospital,
+                       FOREIGN KEY (pid) REFERENCES patient);
 
 
