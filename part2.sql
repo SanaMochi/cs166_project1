@@ -48,8 +48,7 @@ CREATE TABLE patient (pid INTEGER,
 CREATE TABLE appt_has (aid INTEGER,
                           date DATE,
                           time_slot CHAR(10),
-                          PRIMARY KEY(aid),
-                          FOREIGN KEY (docid) REFERENCES doctor_worksdept);  -- a doc can attend many appts (only one doc per appt)
+                          PRIMARY KEY(aid);
                           
 CREATE TABLE staff_worksin (sid INTEGER,
                     sname CHAR(40),
@@ -81,12 +80,17 @@ CREATE TABLE avail_appt (aid INTEGER,
 
 
 -- Relationship Tables
-    
+CREATE TABLE has (aid INTEGER,
+                  docid INTEGER,
+                  PRIMARY KEY(aid, docid),
+                  FOREIGN KEY (aid) REFERENCES (appointment),
+                  FOREIGN KEY (docid) REFERENCES (doctor_worksdept)); -- many docs can attend an appt and a doc can have many appts
+                  
 CREATE TABLE schedule (aid INTEGER,
                        sid INTEGER,
                        PRIMARY KEY(aid, sid),
                        FOREIGN KEY (aid) REFERENCES appt_has,
-                       FOREIGN KEY (sid) REFERENCES staff_worksin); 
+                       FOREIGN KEY (sid) REFERENCES staff_worksin); --staff can schedule many appts and different staff can edit the same appt
                        
 CREATE TABLE request_maintenance (sid INTEGER,
                                   docid INTEGER,
@@ -95,7 +99,7 @@ CREATE TABLE request_maintenance (sid INTEGER,
                                   time_slot CHAR(40),
                                   PRIMARY KEY(sid, docid),
                                   FOREIGN KEY (sid) REFERENCES staff,
-                                  FOREIGN KEY (docid) REFERENCES doctor_worksdept);
+                                  FOREIGN KEY (docid) REFERENCES doctor_worksdept); -- doc can make many requests and staff can deal with many requests
                                   
 CREATE TABLE searches (aid INTEGER,
                        hid INTEGER,
