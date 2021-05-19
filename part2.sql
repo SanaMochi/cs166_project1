@@ -54,7 +54,7 @@ CREATE TABLE appt_has (aid INTEGER,
 CREATE TABLE staff_worksin (sid INTEGER,
                     sname CHAR(40),
                     PRIMARY KEY(sid),
-                    FOREIGN KEY (aid) REFERENCES appt_has, -- many staff work in a hospital
+                    FOREIGN KEY (aid) REFERENCES appt_has -- many staff work in a hospital
                     ON DELETE CASCADE);                      -- participation constraint
 
 -- ISA Heirarchy
