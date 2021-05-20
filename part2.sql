@@ -50,7 +50,7 @@ CREATE TABLE patient (pid INTEGER NOT NULL,
 
 CREATE TABLE appt (aid INTEGER NOT NULL,
                    adate DATE,
-                   time_slot CHAR(10),
+                   atime_slot CHAR(10),
                    PRIMARY KEY(aid));
                           
 CREATE TABLE staff_worksin (sid INTEGER NOT NULL,
