@@ -63,8 +63,14 @@ FROM 'avail_appt.txt'
 
 COPY has (
 	aid,
-	sid)
+	docid)
 FROM 'has.txt'
+WITH DELIMITER ',';
+
+COPY schedule(
+	aid,
+	sid)
+FROM 'schedule.txt'
 WITH DELIMITER ',';
 
 COPY request_maintenance (
